@@ -1,0 +1,45 @@
+@startuml
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam monochrome false
+skinparam actorBorderColor #333333
+skinparam actorBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #333333
+skinparam usecaseBackgroundColor #FFFFFF
+skinparam rectangleBorderColor #333333
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+skinparam stateBorderColor #333333
+skinparam stateBackgroundColor #FFFFFF
+skinparam defaultFontSize 16
+hide empty description
+state "En service" as ES {
+  state Disponible
+  state Autorisation
+  state "Attente véhicule" as AV
+  state "En charge" as EC
+  state "Charge suspendue" as CS
+  state "Fin de session" as FS
+  [*] --> Disponible
+  Disponible --> Autorisation : badgePrésenté
+  Autorisation --> AV : autorisationAcceptée
+  Autorisation --> Disponible : autorisationRefusée
+  AV --> Disponible : after(60 s)
+  AV --> EC : demandeCharge\n[véhicule en état C]
+  EC --> CS : suspensionVéhicule
+  CS --> EC : repriseVéhicule
+  EC --> FS : arrêtDemandé
+  CS --> FS : arrêtDemandé
+  FS --> Disponible : débranchement
+}
+state "Défaut" as D #FDECEC
+state "Hors service" as HS
+[*] --> ES
+ES --> D : défautDétecté
+D --> Disponible : défautAcquitté\n[défaut disparu]
+ES --> HS : miseHorsService
+HS --> ES : miseEnService
+@enduml
