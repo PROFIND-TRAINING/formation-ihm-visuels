@@ -1,0 +1,26 @@
+@startuml
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam monochrome false
+skinparam actorBorderColor #333333
+skinparam actorBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #333333
+skinparam usecaseBackgroundColor #FFFFFF
+skinparam rectangleBorderColor #333333
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+skinparam stateBorderColor #333333
+skinparam stateBackgroundColor #FFFFFF
+hide empty description
+[*] --> Disponible : ①
+Disponible --> Autorisation : ② badgePrésenté / afficher("Patientez")
+Autorisation --> AttenteVehicule : autorisationAcceptée
+AttenteVehicule --> Disponible : ③ after(60 s)
+AttenteVehicule : entry / allumerVoyant(bleu)
+AttenteVehicule --> EnCharge : ④ demandeCharge [véhicule en état C]
+state "Attente véhicule" as AttenteVehicule
+state "En charge" as EnCharge
+@enduml
