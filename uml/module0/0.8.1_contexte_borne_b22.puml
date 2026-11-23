@@ -1,0 +1,35 @@
+@startuml
+left to right direction
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam actorBorderColor #E07B12
+skinparam actorBackgroundColor #FDEBD8
+skinparam usecaseBorderColor #2F6FD6
+skinparam usecaseBackgroundColor #E6EEFB
+skinparam rectangleBorderColor #2F6FD6
+skinparam rectangleBorderThickness 2
+skinparam ArrowColor #555555
+actor "Usager" as U
+actor "Technicien\nde maintenance" as T
+rectangle "Borne Ampéris B22" {
+  usecase "Recharger\nle véhicule" as UC01
+  usecase "Arrêter\nla charge" as UC03
+  usecase "Transmettre les\ndonnées de session" as UC05
+  usecase "Diagnostiquer\nla borne" as UC08
+  usecase "Mettre à jour\nle micrologiciel" as UC07
+}
+actor "Véhicule" as V
+actor "Superviseur" as S
+actor "Horloge" as H
+U -- UC01
+U -- UC03
+T -- UC08
+UC01 -- V
+UC03 -- V
+UC01 -- S
+UC05 -- S
+UC05 -- H
+UC07 -- S
+@enduml
