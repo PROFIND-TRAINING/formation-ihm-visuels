@@ -1,0 +1,38 @@
+@startuml
+left to right direction
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam monochrome false
+skinparam actorBorderColor #333333
+skinparam actorBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #333333
+skinparam usecaseBackgroundColor #FFFFFF
+skinparam rectangleBorderColor #333333
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+actor Usager
+actor Horloge
+actor Véhicule as V
+actor Superviseur as S
+rectangle "Borne B22" {
+  usecase "UC01\nRecharger le véhicule" as UC01
+  usecase "UC03\nArrêter la charge" as UC03
+  usecase "UC05\nTransmettre les\ndonnées de session" as UC05
+  usecase "UC02\nS'identifier par badge" as UC02
+  usecase "UC10\nAutoriser hors ligne" as UC10
+}
+Usager -- UC01
+Usager -- UC03
+Horloge -- UC05
+UC01 ..> UC02 : <<include>>
+UC03 ..> UC02 : <<include>>
+UC10 .> UC02 : <<extend>>
+UC01 -- V
+UC03 -- V
+UC01 -- S
+UC02 -- S
+UC05 -- S
+@enduml
