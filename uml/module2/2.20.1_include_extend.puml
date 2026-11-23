@@ -1,0 +1,38 @@
+@startuml
+left to right direction
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam monochrome false
+skinparam actorBorderColor #333333
+skinparam actorBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #333333
+skinparam usecaseBackgroundColor #FFFFFF
+skinparam rectangleBorderColor #333333
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+actor Usager
+actor Superviseur
+rectangle "Borne B22" {
+  usecase "UC01\nRecharger le véhicule" as UC01
+  usecase "UC03\nArrêter la charge" as UC03
+  usecase UC02 as "UC02\nS'identifier par badge
+--
+points d'extension
+autorisation"
+  usecase "UC10\nAutoriser hors ligne" as UC10
+}
+Usager -- UC01
+Usager -- UC03
+UC02 -- Superviseur
+UC01 ..> UC02 : <<include>>
+UC03 ..> UC02 : <<include>>
+UC10 ..> UC02 : <<extend>>
+note bottom of UC10
+  condition : {superviseur injoignable
+  après 5 s}
+  point d'extension : autorisation
+end note
+@enduml
