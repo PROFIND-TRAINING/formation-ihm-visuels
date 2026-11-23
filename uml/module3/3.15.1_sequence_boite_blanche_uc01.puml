@@ -1,0 +1,35 @@
+@startuml
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceGroupBorderColor #333333
+skinparam actorBorderColor #333333
+skinparam actorBackgroundColor #FFFFFF
+hide footbox
+title sd UC01 — boîte blanche : début de session
+participant ":LecteurBadge" as LB
+participant ":CarteControleur" as CC
+participant ":ModuleCommunication" as MC
+actor Superviseur as S
+participant ":ModulePuissance" as MP
+LB ->> CC : badgeLu(uid)
+CC ->> MC : demanderAutorisation(uid)
+MC -> S : Authorize(uid)
+S -->> MC : Accepted
+MC ->> CC : autorisation(acceptée)
+note over CC : afficherMessage("Branchez votre véhicule")\nvia IAffichage
+note over CC : état pilote B détecté
+CC -> MP : verrouiller()
+note over CC : ① état pilote C détecté
+CC -> MP : ② fermerContacteur()
+note left of MP : {② − ① ≤ 3 s}\nENF-02
+CC ->> MC : débutSession()
+MC ->> S : StartTransaction
+@enduml
