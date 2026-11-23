@@ -1,0 +1,44 @@
+@startuml
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceGroupBorderColor #333333
+skinparam actorBorderColor #333333
+skinparam actorBackgroundColor #FFFFFF
+hide footbox
+title sd UC07 Mettre à jour le micrologiciel (EXF-12)
+actor Superviseur as S
+participant ":AgentOCPP" as A
+participant ":MiseAJour" as U
+participant ":Supervision" as P
+participant ":ControleurSession" as C
+participant ":Amorceur" as B
+S -> A : UpdateFirmware(url, signature)
+A ->> U : nouvelleImage(url, signature)
+U -> U : télécharger(url)
+U -> U : vérifierSignature()
+alt signature valide
+  U ->> P : transférerImage(blocs)
+  P ->> C : EvtCommande(installer)
+  note over C : attend l'état Disponible :\njamais pendant une charge
+  C ->> B : redémarrerSur(nouvelleImage)
+  alt démarrage réussi
+    B ->> P : imageValidée(version)
+    P ->> A : statut(Installed)
+  else échec du démarrage
+    B -> B : revenirAncienneImage()
+    B ->> P : imageRejetée(version)
+    P ->> A : statut(InstallationFailed)
+  end
+else signature invalide
+  U ->> A : statut(InvalidSignature)
+end
+A ->> S : FirmwareStatusNotification(statut)
+@enduml
