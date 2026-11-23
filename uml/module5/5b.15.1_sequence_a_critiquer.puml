@@ -1,0 +1,33 @@
+@startuml
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceGroupBorderColor #333333
+skinparam sequenceReferenceBackgroundColor #FFFFFF
+hide footbox
+title sd UC01 — conception (version d'un collègue)
+participant ":LecteurBadge" as LB
+participant ":ControleurSession" as CS
+participant ":ProxySupervision" as PS
+participant ":Contacteur" as CT
+participant ":GestionnaireDefauts" as GD
+LB -> CS : traiter(EvtBadge(uid))
+activate CS
+CS -> PS : demanderAutorisation(uid)
+activate PS
+PS -->> CS : acceptee
+deactivate PS
+CS -> CT : fermerContacteur()
+deactivate CS
+GD ->> CS : EvtDefaut(d)
+activate CS
+CS -> CT : ouvrir()
+deactivate CS
+@enduml
