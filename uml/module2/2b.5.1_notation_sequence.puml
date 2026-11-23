@@ -1,0 +1,30 @@
+@startuml
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam monochrome false
+skinparam actorBorderColor #333333
+skinparam actorBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #333333
+skinparam usecaseBackgroundColor #FFFFFF
+skinparam rectangleBorderColor #333333
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+hide footbox
+actor Usager
+participant ":Borne B22" as B
+actor Superviseur as S
+Usager ->> B : ① présenterBadge(uid)
+activate B
+B -> S : ② Authorize(uid)
+activate S
+S -->> B : ③ Accepted
+deactivate S
+B ->> Usager : ④ afficher("Branchez votre véhicule")
+deactivate B
+@enduml
