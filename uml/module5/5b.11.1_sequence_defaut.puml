@@ -1,0 +1,34 @@
+@startuml
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceGroupBorderColor #333333
+skinparam sequenceReferenceBackgroundColor #FFFFFF
+hide footbox
+title sd Défaut différentiel pendant la charge — chemin de sûreté direct
+participant ":DetecteurDefaut" as DD
+participant ":GestionnaireDefauts" as GD
+participant ":Contacteur" as CT
+participant ":ControleurSession" as CS
+participant ":ProxySupervision" as PS
+DD ->> GD : ① defautDifferentiel()
+activate GD
+note left of GD : TacheSecurite\n(priorité la plus haute)
+GD -> CT : ouvrir()
+activate CT
+CT -->> GD : ② (contacteur ouvert)
+deactivate CT
+note right of CT : {② − ① ≤ 100 ms}\nENF-01
+create participant "d:Defaut" as D
+GD -> D : <<create>> Defaut(code, gravite)
+GD ->> CS : EvtDefaut(d)
+deactivate GD
+CS ->> PS : signalerDefaut(d)
+@enduml
