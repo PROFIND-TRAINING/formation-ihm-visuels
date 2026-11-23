@@ -1,0 +1,36 @@
+@startuml
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam monochrome false
+skinparam actorBorderColor #333333
+skinparam actorBackgroundColor #FFFFFF
+skinparam usecaseBorderColor #333333
+skinparam usecaseBackgroundColor #FFFFFF
+skinparam rectangleBorderColor #333333
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceGroupBorderColor #333333
+skinparam defaultFontSize 17
+hide footbox
+title sd UC01 — scénario nominal (1/2) : début de session
+actor Usager
+actor Véhicule as V
+participant ":Borne B22" as B
+actor Superviseur as S
+Usager ->> B : présenterBadge(uid)
+B -> S : Authorize(uid)
+S -->> B : Accepted
+B ->> Usager : afficher("Branchez votre véhicule")
+V ->> B : connecter()  [état pilote B]
+B ->> V : signalerCourantMax(32 A)
+V ->> B : ① demanderCharge()  [état pilote C]
+B ->> V : ② délivrerÉnergie()
+note left of B : {② − ① ≤ 3 s}\nENF-02
+B ->> S : StartTransaction
+@enduml
