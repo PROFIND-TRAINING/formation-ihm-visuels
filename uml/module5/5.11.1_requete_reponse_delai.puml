@@ -1,0 +1,31 @@
+@startuml
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceGroupBorderColor #333333
+skinparam sequenceReferenceBackgroundColor #FFFFFF
+hide footbox
+title sd Autorisation : requête/réponse asynchrone avec délai de garde
+participant ":ControleurSession" as CS
+participant ":Temporisations" as T
+participant ":ProxySupervision" as PS
+participant ":ListeLocaleAutorisation" as LL
+CS ->> PS : demanderAutorisation(uid)
+CS -> T : armer(5 s)
+note over CS : TacheSession libre :\naucune attente bloquante
+alt [EvtAutorisation reçu avant 5 s]
+  PS ->> CS : EvtAutorisation(acceptee)
+  CS -> T : annuler()
+else [EvtTemporisation]
+  T ->> CS : EvtTemporisation
+  CS -> LL : contient(uid)
+  LL -->> CS : vrai ou faux
+end
+@enduml
