@@ -24,14 +24,14 @@ participant ":Borne B22" as B
 actor Superviseur as S
 Usager ->> B : présenterBadge(uid)
 B -> S : Authorize(uid)
-alt [réponse Accepted]
+alt réponse Accepted
   S -->> B : Accepted
   B ->> Usager : afficher("Branchez votre véhicule")
-else [réponse Rejected]
+else réponse Rejected
   S -->> B : Rejected
   B ->> Usager : afficher("Badge refusé")
 end
-opt [aucune réponse après 5 s]
+opt aucune réponse après 5 s
   ref over Usager, B, S : UC10 Autoriser hors ligne
 end
 @enduml
