@@ -1,0 +1,34 @@
+@startuml
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceGroupBorderColor #333333
+skinparam sequenceReferenceBackgroundColor #FFFFFF
+hide footbox
+title sd UC01 — conception : du badge à la fermeture du contacteur
+participant ":LecteurBadge" as LB
+participant ":ControleurSession" as CS
+participant ":ProxySupervision" as PS
+participant ":CircuitPilote" as CP
+participant ":CompteurModbus" as CM
+participant ":Contacteur" as CT
+LB ->> CS : surBadgeLu(uid)
+CS ->> PS : demanderAutorisation(uid)
+PS ->> CS : EvtAutorisation(acceptee)
+CS -> CP : fixerCourantMax(32)
+CP ->> CS : ① EvtPilote(C)
+create participant "s:Session" as S
+CS -> S : <<create>> Session(id, uid, 32)
+CS -> CM : lireEnergie_Wh()
+CM -->> CS : energie_Wh
+CS -> CT : ② fermer()
+note right of CS : {② − ① ≤ 3 s}\nENF-02
+CS ->> PS : signalerDebut(s)
+@enduml
