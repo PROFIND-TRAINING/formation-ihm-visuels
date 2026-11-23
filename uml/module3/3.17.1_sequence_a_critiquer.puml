@@ -1,0 +1,28 @@
+@startuml
+skinparam dpi 150
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam ArrowColor #333333
+skinparam noteBorderColor #999999
+skinparam noteBackgroundColor #FFFBEA
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceGroupBorderColor #333333
+skinparam actorBorderColor #333333
+skinparam actorBackgroundColor #FFFFFF
+hide footbox
+title sd UC01 — boîte blanche (version d'un collègue)
+participant ":LecteurBadge" as LB
+participant ":CarteControleur" as CC
+participant ":ModulePuissance" as MP
+actor Superviseur as S
+LB ->> CC : badgeLu(uid)
+CC -> S : Authorize(uid)
+S -->> CC : Accepted
+LB -> MP : verrouiller()
+CC -> MP : fermer()
+CC -> CC : mesurerÉnergie()
+CC ->> S : StartTransaction
+@enduml
